@@ -1,7 +1,8 @@
 
 SMALL_IMAGE_DIMENSIONS = {"width": 150, "height": 150}
 SMALL_IMAGE_PATHS = ["figure_age.png", "figure_donut.png", "figure_ethnicity.png", "figure_radial.png"]
-// data
+
+var selection = 3
 
 
 d3.select("body").select(".small_figs")
@@ -9,8 +10,9 @@ d3.select("body").select(".small_figs")
   .data(SMALL_IMAGE_PATHS)
   .enter()
   .append("div")
-    .attr("class", "col-lg-3 small_fig")
+    .attr("class", "col-lg-3")
   .append("svg")
+  .attr("class", "small_fig")
   .attr("width", SMALL_IMAGE_DIMENSIONS["width"])
   .attr("height", SMALL_IMAGE_DIMENSIONS["height"])
   .append("defs")
@@ -41,12 +43,15 @@ d3.select("body").select(".small_figs")
     .attr("width", SMALL_IMAGE_DIMENSIONS["width"])
     .attr("height", SMALL_IMAGE_DIMENSIONS["width"])
   .style("stroke", function(d, i){
-    if (i === 3) {
+    if (i === selection) {
       return "red"
     } else {
-      return "black"
-    }
-  })
+      return "black"}})
+  .on("click", function(d, i){
+    selection = i
+    remake_expanded_figure(d)
+    })
+
 
 // MAP SELECTION
 
@@ -128,3 +133,26 @@ function make_pattern(svg, image_path){
     .attr("preserveAspectRatio", "none")
     .attr("xlink:href", image_path)
 }
+
+function remake_expanded_figure(new_image){
+
+  d3.select("body").select(".expanded_figs").select(".expanded_figure")
+    .select("pattern")
+    .attr("id", new_image)
+
+  d3.select("body").select(".expanded_figs").select(".expanded_figure")
+    .select("image")
+    .transition()
+    .attr("xlink:href", new_image)
+
+  d3.select("body").select(".expanded_figs").select(".expanded_figure")
+  .select("rect")
+    .attr("fill", "url(#" + new_image + ")")
+    .attr("x", 50)
+    .attr("y", 50)
+    .attr("width", 400)
+    .attr("height", 400)
+    .style("stroke", "red")
+}
+
+// remake_expanded_figure("figure_ethnicity.png")
