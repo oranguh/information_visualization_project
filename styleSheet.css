@@ -1,0 +1,17 @@
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.row.display-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+.small_figure_preview {
+  stroke:black;
+  stroke-width:5;
+}
+
+.selection_map {
+  stroke:black;
+  stroke-width:5;
+}
