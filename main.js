@@ -1,7 +1,7 @@
 
-SMALL_IMAGE_DIMENSIONS = {"width": 150, "height": 150}
+SMALL_IMAGE_DIMENSIONS = {"width": 200, "height": 200}
 SMALL_IMAGE_PATHS = ["figure_age.png", "figure_donut.png", "figure_ethnicity.png", "figure_radial.png"]
-
+FIGURE_FUNCTIONS = [population_pyramid(), "figure_donut.png", "figure_ethnicity.png", radar_chart()]
 var selection = 3
 
 
@@ -10,7 +10,7 @@ d3.select("body").select(".small_figs")
   .data(SMALL_IMAGE_PATHS)
   .enter()
   .append("div")
-    .attr("class", "col-lg-3")
+    .attr("class", "col-lg-3 col-md-3 col-sm-3 col-xs-3 justify-content-center")
   .append("svg")
   .attr("class", "small_fig")
   .attr("width", SMALL_IMAGE_DIMENSIONS["width"])
@@ -38,8 +38,6 @@ d3.select("body").select(".small_figs")
   .attr("class", "small_figure_preview")
   .attr("fill", function(d){
     return "url(#" + d + ")"})
-    .attr("x", 0)
-    .attr("y", 0)
     .attr("width", SMALL_IMAGE_DIMENSIONS["width"])
     .attr("height", SMALL_IMAGE_DIMENSIONS["width"])
   .style("stroke", function(d, i){
@@ -49,7 +47,13 @@ d3.select("body").select(".small_figs")
       return "black"}})
   .on("click", function(d, i){
     selection = i
-    remake_expanded_figure(d)
+    if (selection === 3){
+      radar_chart()
+    } else {
+      remake_expanded_figure(d)
+    }
+
+
     })
 
 
@@ -57,7 +61,7 @@ d3.select("body").select(".small_figs")
 
 d3.select("body").select(".expanded_figs")
   .append("div")
-    .attr("class", "col-lg-4")
+    .attr("class", "col-lg-4 col-md-4 col-sm-4 col-xs-4 justify-content-center")
   .append("svg")
     .attr("class", "selection_map")
     .attr("width", 500)
@@ -77,7 +81,7 @@ make_pattern(d3.select("body").select(".expanded_figs").select(".selection_map")
 
 d3.select("body").select(".expanded_figs")
   .append("div")
-    .attr("class", "col-lg-2")
+    .attr("class", "col-lg-2 col-md-2 col-sm-2 col-xs-2 justify-content-center")
   .append("p")
     .attr("class", "font-weight-bold")
     .text("District A selection:")
@@ -98,15 +102,14 @@ d3.select("body").select(".expanded_figs")
 
 d3.select("body").select(".expanded_figs")
   .append("div")
-    .attr("class", "col-lg-6")
+    .attr("class", "col-lg-6 col-sm-6 col-xs-6 justify-content-center expanded_figure")
   .append("svg")
-    .attr("class", "expanded_figure")
     .attr("width", 500)
     .attr("height", 500)
 
-make_pattern(d3.select("body").select(".expanded_figs").select(".expanded_figure"), "figure_radial.png")
+make_pattern(d3.select("body").select(".expanded_figure").select("svg"), "figure_radial.png")
 
-d3.select("body").select(".expanded_figs").select(".expanded_figure")
+d3.select("body").select(".expanded_figure").select("svg")
 .append("rect")
   .attr("fill", "url(#figure_radial.png)")
   .attr("x", 50)
@@ -114,7 +117,6 @@ d3.select("body").select(".expanded_figs").select(".expanded_figure")
   .attr("width", 400)
   .attr("height", 400)
   .style("stroke", "red")
-
 
 
 
@@ -135,18 +137,22 @@ function make_pattern(svg, image_path){
 }
 
 function remake_expanded_figure(new_image){
+  d3.select("body").select(".expanded_figure").select("svg").remove()
 
-  d3.select("body").select(".expanded_figs").select(".expanded_figure")
-    .select("pattern")
-    .attr("id", new_image)
+  d3.select("body").select(".expanded_figure")
+    .append("svg")
+      .attr("width", 500)
+      .attr("height", 500)
+    .append("pattern")
+      .attr("id", new_image)
 
-  d3.select("body").select(".expanded_figs").select(".expanded_figure")
-    .select("image")
+  d3.select("body").select(".expanded_figure").select("svg")
+    .append("image")
     .transition()
     .attr("xlink:href", new_image)
 
-  d3.select("body").select(".expanded_figs").select(".expanded_figure")
-  .select("rect")
+  d3.select("body").select(".expanded_figure").select("svg")
+  .append("rect")
     .attr("fill", "url(#" + new_image + ")")
     .attr("x", 50)
     .attr("y", 50)

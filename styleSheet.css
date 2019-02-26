@@ -4,7 +4,7 @@
 }
 .row.display-flex > [class*='col-'] {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 .small_figure_preview {
   stroke:black;
